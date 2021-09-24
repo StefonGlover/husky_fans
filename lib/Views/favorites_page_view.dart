@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_page_app/Helpers/firestore_methods.dart';
+import 'package:fan_page_app/Views/feed_page_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,23 @@ class _FavoritesPageState extends State<FavoritesPage> {
   CollectionReference favorites =
       FirebaseFirestore.instance.collection('favorites');
 
-//Favorite
-  Color _selectFavorite = Colors.black;
+
+  int numberOfItems = 1000;
+
+  List<Color> _colors = [];
+
+  getdatafromserver() async {
+    //this show you are fetching data from server
+    _colors = List.generate(numberOfItems, (index) => Colors.red);
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getdatafromserver();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -65,15 +81,19 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         ButtonBar(
                           children: [
                             TextButton(
-                                onPressed: () async {},
-                                child: Icon(Icons.favorite,
-                                    color: _selectFavorite)),
+                                onPressed: () async {
+                                  setState(() {
+                                    _colors[index] = Colors.black;
+                                  });
+
+                                  deleteFavorite(snapshot.data.docs[index].data()['details'], snapshot.data.docs[index].data()['firstName']);
+
+                                },
+                                child: Icon(Icons.thumb_up,
+                                    color: _colors[index])),
                             TextButton(
                                 onPressed: null,
-                                child: Text(
-                                  'Comment',
-                                  style: TextStyle(color: Colors.black),
-                                ))
+                                child: Text('Comment', style: TextStyle(color: Colors.black)))
                           ],
                         )
                       ],

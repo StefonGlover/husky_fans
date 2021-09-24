@@ -16,7 +16,7 @@ class ForgotPasswordView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Forgot Password"),
+        title: const Text("Forgot Password", style: TextStyle(fontStyle: FontStyle.italic, fontWeight: FontWeight.bold )),
           backgroundColor: Colors.grey[900]
       ),
       body: Container(

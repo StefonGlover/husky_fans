@@ -80,16 +80,19 @@ class _MainPageViewState extends State<MainPageView> {
                                     'firstName': 'PlaceHolder',
                                     'isFavorite': false,
                                     'photo': 'Placeholder',
+                                    'uid':
+                                        FirebaseAuth.instance.currentUser!.uid,
                                     'timePosted': formatted
                                   })
                                   .then((value) => print('Post Added'))
                                   .catchError((error) =>
                                       print('Failed to add post: $error'));
 
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => MainPageView()));
+                             Navigator.pop(context);
+                              Navigator.push(context,
+                                  MaterialPageRoute(builder: (context) => MainPageView()));
+
+
                             }
                           },
                           child: const Text(
@@ -144,7 +147,9 @@ class _MainPageViewState extends State<MainPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HuskyFans'),
+        title: Text('HuskyFans',
+            style: TextStyle(
+                fontStyle: FontStyle.italic, fontWeight: FontWeight.bold)),
         backgroundColor: Colors.grey[900],
         automaticallyImplyLeading: false,
         actions: [
@@ -155,7 +160,7 @@ class _MainPageViewState extends State<MainPageView> {
                 backgroundColor: Colors.grey[900],
                 title: const Text('Log out',
                     style: TextStyle(color: Colors.white)),
-                content: const Text('Are you sure you want to log out?!',
+                content: const Text('Are you sure you want to log out?',
                     style: TextStyle(color: Colors.white)),
                 actions: <Widget>[
                   TextButton(

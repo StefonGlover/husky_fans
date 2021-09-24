@@ -14,8 +14,29 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
-//Favorite
-  Color _selectFavorite = Colors.black;
+  int postCount = 0;
+
+  getPostsCount() async
+  {
+    QuerySnapshot _posts = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get();
+    List<DocumentSnapshot> _myPostCount = _posts.docs;
+    if(_myPostCount.length == null)
+    {
+      postCount = 0;
+    }
+    else
+    {
+      postCount = _myPostCount.length;
+    }
+    setState(() {
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getPostsCount();
+  }
 
   User? user = FirebaseAuth.instance.currentUser;
 
@@ -52,7 +73,7 @@ class _AccountPageState extends State<AccountPage> {
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                          subtitle: Text(
+                          subtitle: Text("Number of posts: $postCount"+"\n"
                               "Email: " +
                                   FirebaseAuth.instance.currentUser!.email
                                       .toString() +

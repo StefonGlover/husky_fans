@@ -105,7 +105,7 @@ class _FeedPageState extends State<FeedPage> {
                                   }
                                 },
                                 icon: Icon(
-                                  Icons.favorite,
+                                  Icons.thumb_up,
                                   color: _colors[index],
                                 )),
                             TextButton(

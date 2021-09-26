@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_page_app/Helpers/auth.dart';
+import 'package:fan_page_app/Helpers/validation_methods.dart';
+import 'package:fan_page_app/Views/main_page_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import '../main.dart';
+import 'login_view_page.dart';
 
 class AccountPage extends StatefulWidget {
   const AccountPage({Key? key}) : super(key: key);
@@ -14,22 +19,147 @@ class AccountPage extends StatefulWidget {
 class _AccountPageState extends State<AccountPage> {
   CollectionReference users = FirebaseFirestore.instance.collection('users');
 
+  //Controllers to catch user's inputs
+  TextEditingController _emailField = TextEditingController();
+  TextEditingController _passwordField = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+
   int postCount = 0;
 
-  getPostsCount() async
-  {
-    QuerySnapshot _posts = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get();
+  void _deleteAccountAlertDialog() {
+    showDialog(
+        context: context,
+        builder: (BuildContext) {
+          var _postMessage = TextEditingController();
+          return AlertDialog(
+            scrollable: true,
+            title: Text('Delete account',
+                style: TextStyle(color: Colors.grey[900])),
+            content: Padding(
+              padding: EdgeInsets.all(10),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  children: [
+                    TextFormField(
+                      validator: (value) {
+                        if (validateEmail(value!) == false) {
+                          return 'Please enter a valid email';
+                        }
+                      },
+                      autocorrect: false,
+                      controller: _emailField,
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                          labelText: 'Email',
+                          labelStyle: TextStyle(color: Colors.black),
+                          isDense: true,
+                          hintStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.email,
+                            color: Colors.black,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                              ),
+                              borderRadius: BorderRadius.circular(20))),
+                    ),
+                    SizedBox(height: 20),
+                    TextFormField(
+                      validator: (value) {
+                        if (isPasswordValid(value!) == false) {
+                          return 'Please enter a valid password';
+                        }
+                      },
+                      autocorrect: false,
+                      controller: _passwordField,
+                      obscureText: true,
+                      style: TextStyle(color: Colors.black),
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          labelStyle: TextStyle(color: Colors.black),
+                          isDense: true,
+                          hintStyle: TextStyle(
+                            color: Colors.black,
+                          ),
+                          prefixIcon: Icon(
+                            Icons.lock,
+                            color: Colors.black,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.black,
+                              ),
+                              borderRadius: BorderRadius.circular(20))),
+                    ),
+                    Row(
+                      children: [
+                        TextButton(
+                          onPressed: () async {
+                            //Need a method to validate user's password
+                            if (_formKey.currentState!.validate()) {
+
+                              var collection = FirebaseFirestore.instance
+                                  .collection('users');
+                              await collection
+                                  .doc(FirebaseAuth.instance.currentUser!.uid)
+                                  .delete();
+
+
+
+                              bool isUserDeleted = await deleteUser(
+                                  _emailField.text, _passwordField.text);
+
+                              if (isUserDeleted) {
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => Home()),
+                                );
+                              } else {
+                                _emailField.clear();
+                                _passwordField.clear();
+                                Navigator
+                                    .pop(context);
+
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content: Text(
+                                            'Error deleting your account!!')));
+                              }
+                            }
+                          },
+                          child: const Text(
+                            'Delete',
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  getPostsCount() async {
+    QuerySnapshot _posts = await FirebaseFirestore.instance
+        .collection('posts')
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+        .get();
     List<DocumentSnapshot> _myPostCount = _posts.docs;
-    if(_myPostCount.length == null)
-    {
+    if (_myPostCount.length == null) {
       postCount = 0;
-    }
-    else
-    {
+    } else {
       postCount = _myPostCount.length;
     }
-    setState(() {
-    });
+    setState(() {});
   }
 
   @override
@@ -73,8 +203,10 @@ class _AccountPageState extends State<AccountPage> {
                               style: TextStyle(
                                   color: Colors.black,
                                   fontWeight: FontWeight.bold)),
-                          subtitle: Text("Number of posts: $postCount"+"\n"
-                              "Email: " +
+                          subtitle: Text(
+                              "Number of posts: $postCount" +
+                                  "\n"
+                                      "Email: " +
                                   FirebaseAuth.instance.currentUser!.email
                                       .toString() +
                                   '\n'
@@ -89,9 +221,9 @@ class _AccountPageState extends State<AccountPage> {
                         ButtonBar(
                           children: [
                             TextButton(
-                                onPressed: null,
+                                onPressed: _deleteAccountAlertDialog,
                                 child: Text(
-                                  'Update Profile',
+                                  'Delete account',
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold),

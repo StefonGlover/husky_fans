@@ -168,7 +168,6 @@ class _HomeState extends State<Home> {
                                 MaterialPageRoute(
                                     builder: (context) => MainPageView()));
 
-                            ;
                           },
                           child: Image(
                               width: 55,

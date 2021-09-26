@@ -105,3 +105,23 @@ Future<void> signOutFromGoogle() async {
   await _googleSignIn.signOut();
   await _auth.signOut();
 }
+
+Future<bool> deleteUser( String email, String password) async{
+
+// Create a credential
+  AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+
+// Reauthenticate
+  await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+
+  try {
+    await FirebaseAuth.instance.currentUser!.delete();
+    return true;
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'requires-recent-login') {
+      print('The user must reauthenticate before this operation can be executed.');
+
+    }
+    return false;
+  }
+}

@@ -88,9 +88,7 @@ class _MainPageViewState extends State<MainPageView> {
                                   .catchError((error) =>
                                       print('Failed to add post: $error'));
 
-                             Navigator.pop(context);
-                              Navigator.push(context,
-                                  MaterialPageRoute(builder: (context) => MainPageView()));
+                              Navigator.of(context, rootNavigator: true).pop();
 
 
                             }
@@ -164,7 +162,7 @@ class _MainPageViewState extends State<MainPageView> {
                     style: TextStyle(color: Colors.white)),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.pop(context, 'Cancel'),
+                    onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
                     child: const Text(
                       'Cancel',
                       style: TextStyle(color: Colors.white),

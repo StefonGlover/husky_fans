@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_page_app/Helpers/auth.dart';
 import 'package:fan_page_app/Helpers/firestore_methods.dart';
 import 'package:fan_page_app/Helpers/validation_methods.dart';
@@ -191,9 +192,6 @@ class _RegisterFormsState extends State<RegisterForms> {
                           color: Colors.black),
                       child: MaterialButton(
                           onPressed: () async {
-                            final DateTime now = DateTime.now();
-                            final DateFormat formatter = DateFormat('MM-dd-yyyy');
-                            final String formatted = formatter.format(now);
 
                             if (_passwordField.text
                                 .contains(_confirmPasswordField.text)) {
@@ -203,15 +201,14 @@ class _RegisterFormsState extends State<RegisterForms> {
                                     _passwordField.text,
                                     _firstNameField.text,
                                     _lastNameField.text,
-
-                                    formatted);
+                                   Timestamp.fromDate(DateTime.now()));
 
                                 if (isUserValidated) {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
                                           content:
                                           Text('Registration successful')));
-                                  Navigator.pop(context);
+                                  Navigator.of(context, rootNavigator: true).pop();
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(
@@ -220,6 +217,13 @@ class _RegisterFormsState extends State<RegisterForms> {
                                 }
                               }
                             }
+                            else
+                              {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                        content:
+                                        Text('Passwords do not match')));
+                              }
                           },
                           child: Text(
                             "Sign up",

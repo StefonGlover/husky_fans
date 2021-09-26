@@ -3,6 +3,8 @@ import 'package:fan_page_app/Helpers/firestore_methods.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
+import 'package:timeago/timeago.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({Key? key}) : super(key: key);
@@ -36,7 +38,7 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     return Container(
       child: FutureBuilder(
-        future: posts.orderBy('timePosted').get(),
+        future: posts.orderBy('timePosted', descending: true).get(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
           if (!snapshot.hasData) {
             return Center(
@@ -58,13 +60,13 @@ class _FeedPageState extends State<FeedPage> {
                             Icons.pets,
                             color: Colors.black,
                           ),
-                          title: Text(
-                              snapshot.data.docs[index].data()['firstName'] +
-                                  '\n' +
-                                  snapshot.data.docs[index]
-                                      .data()['timePosted'] +
-                                  '\n',
-                              style: TextStyle(color: Colors.black)),
+                          title: Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(snapshot.data.docs[index].data()['firstName'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                             Text(snapshot.data.docs[index].data()['timePosted'].toDate().toString().substring(0,16),style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
+                            ],
+                          ),
                           subtitle: Text(
                               snapshot.data.docs[index].data()['details'],
                               style: TextStyle(

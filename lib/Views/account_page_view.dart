@@ -99,43 +99,50 @@ class _AccountPageState extends State<AccountPage> {
                     Row(
                       children: [
                         TextButton(
+                            onPressed: () =>
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop(),
+                            child: Text('Cancel',
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.bold))),
+                        TextButton(
                           onPressed: () async {
                             //Need a method to validate user's password
                             if (_formKey.currentState!.validate()) {
+                              if (await userReauthenticated(
+                                  _emailField.text, _passwordField.text)) {
+                                var collection = FirebaseFirestore.instance
+                                    .collection('users');
+                                await collection
+                                    .doc(FirebaseAuth.instance.currentUser!.uid)
+                                    .delete();
 
-                              var collection = FirebaseFirestore.instance
-                                  .collection('users');
-                              await collection
-                                  .doc(FirebaseAuth.instance.currentUser!.uid)
-                                  .delete();
-
-
-
-                              bool isUserDeleted = await deleteUser(
-                                  _emailField.text, _passwordField.text);
-
-                              if (isUserDeleted) {
-
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(builder: (context) => Home()),
-                                );
-                              } else {
+                                await deleteUser(
+                                    _emailField.text, _passwordField.text);
                                 _emailField.clear();
                                 _passwordField.clear();
-                                Navigator
-                                    .pop(context);
 
+                                Navigator.of(context, rootNavigator: true)
+                                    .pop();
+
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => Home()));
+                              } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                         content: Text(
-                                            'Error deleting your account!!')));
+                                            'Incorrect email or password')));
                               }
                             }
                           },
                           child: const Text(
                             'Delete',
-                            style: TextStyle(color: Colors.black),
+                            style: TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
@@ -195,28 +202,40 @@ class _AccountPageState extends State<AccountPage> {
                             Icons.person,
                             color: Colors.black,
                           ),
-                          title: Text(
-                              snapshot.data.docs[index].data()['firstName'] +
-                                  '\n' +
-                                  snapshot.data.docs[index].data()['lastName'] +
-                                  '\n',
-                              style: TextStyle(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold)),
-                          subtitle: Text(
-                              "Number of posts: $postCount" +
-                                  "\n"
-                                      "Email: " +
-                                  FirebaseAuth.instance.currentUser!.email
-                                      .toString() +
-                                  '\n'
-                                      'Date joined: ' +
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(
                                   snapshot.data.docs[index]
-                                      .data()['dateRegistered']
-                                      .toString(),
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.black)),
+                                          .data()['firstName'] +
+                                      " " +
+                                      snapshot.data.docs[index]
+                                          .data()['lastName'],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text("Number of posts: $postCount",
+                                  style: TextStyle(color: Colors.black)),
+                              Text(
+                                  "Email: " +
+                                      FirebaseAuth.instance.currentUser!.email
+                                          .toString(),
+                                  style: TextStyle(color: Colors.black)),
+                              Text(
+                                  'Date joined: ' +
+                                      snapshot.data.docs[index]
+                                          .data()['dateRegistered']
+                                          .toDate()
+                                          .toString()
+                                          .substring(0, 16),
+                                  style: TextStyle(color: Colors.black)),
+                            ],
+                          ),
                         ),
                         ButtonBar(
                           children: [

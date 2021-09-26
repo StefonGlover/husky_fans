@@ -31,7 +31,7 @@ Future<bool> addUser(
 }
 
 Future<bool> getFavorite(
-    String details, String firstName, String photo, String timePosted) async {
+    String details, String firstName, String photo, Timestamp timePosted) async {
   try {
     CollectionReference favorite =
         FirebaseFirestore.instance.collection('favorites');

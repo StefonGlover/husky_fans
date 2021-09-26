@@ -22,7 +22,7 @@ Future<bool> signIn(String email, String password) async {
 }
 
 Future<bool> register(String email, String password, String firstName,
-    String lastName, String timeRegistered) async {
+    String lastName, Timestamp timeRegistered) async {
   try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -108,12 +108,6 @@ Future<void> signOutFromGoogle() async {
 
 Future<bool> deleteUser( String email, String password) async{
 
-// Create a credential
-  AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
-
-// Reauthenticate
-  await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
-
   try {
     await FirebaseAuth.instance.currentUser!.delete();
     return true;
@@ -125,3 +119,22 @@ Future<bool> deleteUser( String email, String password) async{
     return false;
   }
 }
+
+Future<bool> userReauthenticated(String email, String password) async
+{
+  try {
+    // Create a credential
+    AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+
+    //Reauthenticate
+    await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+
+    return true;
+  } on FirebaseAuthException catch (e) {
+
+      print('Error with reauthentication. Verify that the user\'s email and password were correct.');
+
+    return false;
+  }
+}
+

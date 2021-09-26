@@ -69,11 +69,6 @@ class _MainPageViewState extends State<MainPageView> {
                         TextButton(
                           onPressed: () {
                             if (_formKey.currentState!.validate()) {
-                              final DateTime now = DateTime.now();
-                              final DateFormat formatter =
-                                  DateFormat('MM-dd-yyyy');
-                              final String formatted = formatter.format(now);
-
                               posts
                                   .add({
                                     'details': _postMessage.text,
@@ -82,15 +77,14 @@ class _MainPageViewState extends State<MainPageView> {
                                     'photo': 'Placeholder',
                                     'uid':
                                         FirebaseAuth.instance.currentUser!.uid,
-                                    'timePosted': formatted
+                                    'timePosted':
+                                        Timestamp.fromDate(DateTime.now())
                                   })
                                   .then((value) => print('Post Added'))
                                   .catchError((error) =>
                                       print('Failed to add post: $error'));
 
                               Navigator.of(context, rootNavigator: true).pop();
-
-
                             }
                           },
                           child: const Text(
@@ -162,7 +156,8 @@ class _MainPageViewState extends State<MainPageView> {
                     style: TextStyle(color: Colors.white)),
                 actions: <Widget>[
                   TextButton(
-                    onPressed: () => Navigator.of(context, rootNavigator: true).pop(),
+                    onPressed: () =>
+                        Navigator.of(context, rootNavigator: true).pop(),
                     child: const Text(
                       'Cancel',
                       style: TextStyle(color: Colors.white),

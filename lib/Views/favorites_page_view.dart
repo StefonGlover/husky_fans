@@ -37,7 +37,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
     return Container(
       child: FutureBuilder(
         future: favorites
-            .orderBy('timePosted')
+            .orderBy('timePosted', descending: true)
             .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
             .get(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
@@ -60,13 +60,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                             Icons.pets,
                             color: Colors.black,
                           ),
-                          title: Text(
-                              snapshot.data.docs[index].data()['firstName'] +
-                                  '\n' +
-                                  snapshot.data.docs[index]
-                                      .data()['timePosted'] +
-                                  '\n',
-                              style: TextStyle(color: Colors.black)),
+                          title: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Text(snapshot.data.docs[index].data()['firstName']),
+                              Text(snapshot.data.docs[index].data()['timePosted'].toDate().toString().substring(0,16))
+                            ],
+                          ),
                           subtitle: Text(
                               snapshot.data.docs[index].data()['details'],
                               style: TextStyle(

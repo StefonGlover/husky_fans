@@ -147,7 +147,7 @@ class _HomeState extends State<Home> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold)),
                       ),
-                      SizedBox(height: 5),
+                      SizedBox(height: 10),
                       GestureDetector(
                         onTap: () => Navigator.push(
                             context,
@@ -158,7 +158,7 @@ class _HomeState extends State<Home> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.bold)),
                       ),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                       GestureDetector(
                           onTap: () async {
                             await signInWithGoogle();
@@ -170,8 +170,8 @@ class _HomeState extends State<Home> {
 
                           },
                           child: Image(
-                              width: 55,
-                              image: AssetImage('assets/google_logo.jpg'))),
+                             height: 50,
+                              image: AssetImage('assets/google_sign_in.png'))),
                     ],
                   ),
                 )))));

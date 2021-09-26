@@ -193,11 +193,11 @@ class _MainPageViewState extends State<MainPageView> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Feed'),
+          BottomNavigationBarItem(icon: Icon(Icons.view_headline), label: 'Feed'),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: 'Favorites'),
           BottomNavigationBarItem(
-              icon: Icon(Icons.account_box), label: 'Account'),
+              icon: Icon(Icons.person), label: 'Account'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

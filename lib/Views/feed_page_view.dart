@@ -61,10 +61,22 @@ class _FeedPageState extends State<FeedPage> {
                             color: Colors.black,
                           ),
                           title: Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(snapshot.data.docs[index].data()['firstName'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                             Text(snapshot.data.docs[index].data()['timePosted'].toDate().toString().substring(0,16),style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
+                              Text(
+                                  snapshot.data.docs[index].data()['firstName'],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                  snapshot.data.docs[index]
+                                      .data()['timePosted']
+                                      .toDate()
+                                      .toString()
+                                      .substring(0, 16),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold))
                             ],
                           ),
                           subtitle: Text(
@@ -80,42 +92,51 @@ class _FeedPageState extends State<FeedPage> {
                         ),
                         ButtonBar(
                           children: [
-                            IconButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    _colors[index] = Colors.red;
-                                  });
-                                  bool favoriteAdded = await getFavorite(
-                                      snapshot.data.docs[index]
-                                          .data()['details'],
-                                      snapshot.data.docs[index]
-                                          .data()['firstName'],
-                                      snapshot.data.docs[index].data()['photo'],
-                                      snapshot.data.docs[index]
-                                          .data()['timePosted']);
+                            Row(
+                              children: [
+                                IconButton(
+                                    onPressed: () async {
+                                      setState(() {
+                                        _colors[index] = Colors.red;
+                                      });
+                                      bool favoriteAdded = await getFavorite(
+                                          snapshot.data.docs[index]
+                                              .data()['details'],
+                                          snapshot.data.docs[index]
+                                              .data()['firstName'],
+                                          snapshot.data.docs[index]
+                                              .data()['photo'],
+                                          snapshot.data.docs[index]
+                                              .data()['timePosted']);
 
-                                  if (favoriteAdded) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Post was added to favorites!')));
-                                  } else {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content: Text(
-                                                'Error adding post to favorites!')));
-                                  }
-                                },
-                                icon: Icon(
-                                  Icons.thumb_up,
-                                  color: _colors[index],
-                                )),
-                            TextButton(
-                                onPressed: null,
-                                child: Text(
-                                  'Comment',
-                                  style: TextStyle(color: Colors.black),
-                                ))
+                                      if (favoriteAdded) {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Post was added to favorites!')));
+                                      } else {
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(const SnackBar(
+                                                content: Text(
+                                                    'Error adding post to favorites!')));
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.favorite,
+                                      color: _colors[index],
+                                    )),
+                                IconButton(
+                                    onPressed: null,
+                                    icon:
+                                        Icon(Icons.chat, color: Colors.black)),
+                                IconButton(
+                                    onPressed: null,
+                                    icon: Icon(
+                                      Icons.share,
+                                      color: Colors.black,
+                                    ))
+                              ],
+                            )
                           ],
                         )
                       ],

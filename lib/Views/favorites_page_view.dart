@@ -63,8 +63,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           title: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(snapshot.data.docs[index].data()['firstName']),
-                              Text(snapshot.data.docs[index].data()['timePosted'].toDate().toString().substring(0,16))
+                              Text(snapshot.data.docs[index].data()['firstName'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                              Text(snapshot.data.docs[index].data()['timePosted'].toDate().toString().substring(0,16), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
                             ],
                           ),
                           subtitle: Text(
@@ -80,20 +80,18 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         ),
                         ButtonBar(
                           children: [
-                            TextButton(
-                                onPressed: () async {
-                                  setState(() {
-                                    _colors[index] = Colors.black;
-                                  });
+                           IconButton(onPressed: () async{
+                             setState(() {
+                               _colors[index] = Colors.black;
+                             });
 
-                                  deleteFavorite(snapshot.data.docs[index].data()['details'], snapshot.data.docs[index].data()['firstName']);
+                             deleteFavorite(snapshot.data.docs[index].data()['details'], snapshot.data.docs[index].data()['firstName']);
 
-                                },
-                                child: Icon(Icons.thumb_up,
-                                    color: _colors[index])),
-                            TextButton(
+                           }, icon: Icon(Icons.favorite, color: _colors[index])),
+                            IconButton(
                                 onPressed: null,
-                                child: Text('Comment', style: TextStyle(color: Colors.black)))
+                                icon:
+                                Icon(Icons.chat, color: Colors.black))
                           ],
                         )
                       ],

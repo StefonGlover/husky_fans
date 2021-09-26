@@ -208,7 +208,7 @@ class _RegisterFormsState extends State<RegisterForms> {
                                       const SnackBar(
                                           content:
                                           Text('Registration successful')));
-                                  Navigator.of(context, rootNavigator: true).pop();
+                                  Navigator.of(context).pop();
                                 } else {
                                   ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(

@@ -197,6 +197,7 @@ class _AccountPageState extends State<AccountPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
+
                         ListTile(
                           leading: Icon(
                             Icons.person,

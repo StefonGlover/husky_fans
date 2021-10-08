@@ -1,8 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-
 
 /// This method allows the user to sign in
 /// @params email & password of String
@@ -43,7 +43,7 @@ Future<bool> signInAnonymously() async {
 /// @params email, password, firstName, lastname, and time registered
 /// returns bool of the execution state
 Future<bool> register(String email, String password, String firstName,
-    String lastName, Timestamp timeRegistered) async {
+    String lastName, String profilePic, Timestamp timeRegistered) async {
   try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -51,14 +51,18 @@ Future<bool> register(String email, String password, String firstName,
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     FirebaseAuth auth = FirebaseAuth.instance;
 
+
     //Get the user's id
     String uid = auth.currentUser!.uid.toString();
+
+
 
     users
         .doc(uid)
         .set({
           'firstName': firstName,
           'lastName': lastName,
+      'profilePic':profilePic,
           'dateRegistered': timeRegistered,
           'isAdmin': false,
           'isCustomer': true,

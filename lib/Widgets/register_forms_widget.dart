@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
+import 'package:path/path.dart';
 
 class RegisterForms extends StatefulWidget {
   const RegisterForms({Key? key}) : super(key: key);
@@ -49,17 +50,19 @@ class _RegisterFormsState extends State<RegisterForms> {
     }
   }
 
-  Future<bool> uploadFile(Timestamp registered) async {
+  Future<String> uploadFile() async {
     try {
-      String filePath = 'profile_pics/$registered';
-      final Reference firebaseStorage =
-          FirebaseStorage.instance.ref().child(filePath);
-      final UploadTask task = firebaseStorage.putFile(_image!);
-      return true;
+      TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+          .ref()
+          .child("profilePics")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .putFile(_image!);
+
+      return taskSnapshot.ref.getDownloadURL();
     } catch (e) {
       print('Failed upload image: $e');
 
-      return false;
+      return "";
     }
   }
 
@@ -256,16 +259,18 @@ class _RegisterFormsState extends State<RegisterForms> {
                         if (_passwordField.text
                             .contains(_confirmPasswordField.text)) {
                           if (_formKey.currentState!.validate()) {
+                            String profilePic;
+
                             bool isUserValidated = await register(
                                 _emailField.text,
                                 _passwordField.text,
                                 _firstNameField.text,
                                 _lastNameField.text,
+                                profilePic = await uploadFile(),
                                 timeRegistered =
                                     Timestamp.fromDate(DateTime.now()));
 
                             if (isUserValidated) {
-                              uploadFile(timeRegistered);
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content:

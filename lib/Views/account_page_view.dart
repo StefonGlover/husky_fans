@@ -197,12 +197,9 @@ class _AccountPageState extends State<AccountPage> {
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-
                         ListTile(
-                          leading: Icon(
-                            Icons.person,
-                            color: Colors.black,
-                          ),
+                          leading: Image.network(
+                              snapshot.data.docs[index].data()['profilePic']),
                           title: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [

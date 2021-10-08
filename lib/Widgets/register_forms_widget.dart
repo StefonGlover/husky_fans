@@ -50,7 +50,7 @@ class _RegisterFormsState extends State<RegisterForms> {
     }
   }
 
-  Future<String> uploadFile() async {
+  Future<String> uploadProfileImage() async {
     try {
       TaskSnapshot taskSnapshot = await FirebaseStorage.instance
           .ref()
@@ -266,7 +266,7 @@ class _RegisterFormsState extends State<RegisterForms> {
                                 _passwordField.text,
                                 _firstNameField.text,
                                 _lastNameField.text,
-                                profilePic = await uploadFile(),
+                                profilePic = await uploadProfileImage(),
                                 timeRegistered =
                                     Timestamp.fromDate(DateTime.now()));
 

@@ -51,18 +51,15 @@ Future<bool> register(String email, String password, String firstName,
     CollectionReference users = FirebaseFirestore.instance.collection('users');
     FirebaseAuth auth = FirebaseAuth.instance;
 
-
     //Get the user's id
     String uid = auth.currentUser!.uid.toString();
-
-
 
     users
         .doc(uid)
         .set({
           'firstName': firstName,
           'lastName': lastName,
-      'profilePic':profilePic,
+          'profilePic': profilePic,
           'dateRegistered': timeRegistered,
           'isAdmin': false,
           'isCustomer': true,

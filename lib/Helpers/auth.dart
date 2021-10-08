@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+
 /// This method allows the user to sign in
 /// @params email & password of String
 /// returns bool of sign in state

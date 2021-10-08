@@ -2,6 +2,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+/// This method adds a new user to the database
+/// @params String of the user's name & DateTime registered
+/// returns bool of the state
 Future<bool> addUser(
     String firstName, String lastName, DateTime dateRegistered) async {
   try {
@@ -30,8 +33,11 @@ Future<bool> addUser(
   }
 }
 
-Future<bool> getFavorite(
-    String details, String firstName, String photo, Timestamp timePosted) async {
+/// This method update the database with the user's favorites posts
+/// @params post details
+/// returns bool of the state
+Future<bool> getFavorite(String details, String firstName, String photo,
+    Timestamp timePosted) async {
   try {
     CollectionReference favorite =
         FirebaseFirestore.instance.collection('favorites');
@@ -57,12 +63,13 @@ Future<bool> getFavorite(
   }
 }
 
-
-Future<bool> deleteFavorite(
-    String details, String firstName) async {
+/// This method removes the user's favorite post
+/// @params String of details and firstName from the post
+/// returns bool of the state
+Future<bool> deleteFavorite(String details, String firstName) async {
   try {
     CollectionReference favorite =
-    FirebaseFirestore.instance.collection('favorites');
+        FirebaseFirestore.instance.collection('favorites');
     FirebaseAuth auth = FirebaseAuth.instance;
 
     //Get the user's id
@@ -80,9 +87,15 @@ Future<bool> deleteFavorite(
     return false;
   }
 }
-Future<int> getPostsCount() async
-{
-  QuerySnapshot _posts = await FirebaseFirestore.instance.collection('posts').where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid).get();
+
+/// This methods obtains the number of posts the user made
+/// @params none
+/// returns int number of posts
+Future<int> getPostsCount() async {
+  QuerySnapshot _posts = await FirebaseFirestore.instance
+      .collection('posts')
+      .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+      .get();
   List<DocumentSnapshot> _myPostCount = _posts.docs;
   return _myPostCount.length;
 }

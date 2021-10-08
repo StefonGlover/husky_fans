@@ -139,9 +139,16 @@ class _MainPageViewState extends State<MainPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('HuskyFans',
-            style: TextStyle(
-                fontStyle: FontStyle.italic, fontWeight: FontWeight.bold)),
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text('HuskyFans',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic, fontWeight: FontWeight.bold)),
+            SizedBox(width: 5),
+            Icon(Icons.pets)
+          ],
+        ),
         backgroundColor: Colors.grey[900],
         automaticallyImplyLeading: false,
         actions: [
@@ -193,11 +200,11 @@ class _MainPageViewState extends State<MainPageView> {
       ),
       bottomNavigationBar: BottomNavigationBar(
         items: [
-          BottomNavigationBarItem(icon: Icon(Icons.view_headline), label: 'Feed'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.view_headline), label: 'Feed'),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: 'Favorites'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.person), label: 'Account'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
         ],
         currentIndex: _selectedIndex,
         onTap: _onItemTapped,

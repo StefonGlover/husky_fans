@@ -3,6 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+/// This method allows the user to sign in
+/// @params email & password of String
+/// returns bool of sign in state
 Future<bool> signIn(String email, String password) async {
   try {
     await FirebaseAuth.instance
@@ -21,6 +24,23 @@ Future<bool> signIn(String email, String password) async {
   }
 }
 
+/// This method allows the user to sign in anonymously
+/// @params none
+/// returns bool of the sign in state
+Future<bool> signInAnonymously() async {
+  try {
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInAnonymously();
+    return true;
+  } on FirebaseAuthException catch (e) {
+    print('Error with signing in.');
+    return false;
+  }
+}
+
+/// This method allows the user to create a new account
+/// @params email, password, firstName, lastname, and time registered
+/// returns bool of the execution state
 Future<bool> register(String email, String password, String firstName,
     String lastName, Timestamp timeRegistered) async {
   try {
@@ -60,10 +80,16 @@ Future<bool> register(String email, String password, String firstName,
   }
 }
 
+/// This methods sign the user out
+/// @params none
+/// return none
 Future<void> signOut() async {
   await FirebaseAuth.instance.signOut();
 }
 
+/// This method obtains the user's uid
+/// @param none
+/// returns String of user's uid
 Future<String?> currentUserId() async {
   var currentUser = FirebaseAuth.instance.currentUser;
 
@@ -74,10 +100,16 @@ Future<String?> currentUserId() async {
   }
 }
 
+/// This sends a email link to the user to reset his/her password
+/// @param Email of the user
+/// return none
 Future<void> resetPassword(String email) async {
   await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
 }
 
+/// This method allows the user to sign in with a gmail account
+/// @params none
+/// returns credential for logging in
 Future<String?> signInWithGoogle() async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -98,6 +130,9 @@ Future<String?> signInWithGoogle() async {
   }
 }
 
+/// This method signs the user out from Google
+/// @param none
+/// returns none
 Future<void> signOutFromGoogle() async {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn();
@@ -106,35 +141,40 @@ Future<void> signOutFromGoogle() async {
   await _auth.signOut();
 }
 
-Future<bool> deleteUser( String email, String password) async{
-
+/// This method delete the user's account after re-authentication is called
+/// @params String of email & password
+/// returns bool of the state
+Future<bool> deleteUser(String email, String password) async {
   try {
     await FirebaseAuth.instance.currentUser!.delete();
     return true;
   } on FirebaseAuthException catch (e) {
     if (e.code == 'requires-recent-login') {
-      print('The user must reauthenticate before this operation can be executed.');
-
+      print(
+          'The user must reauthenticate before this operation can be executed.');
     }
     return false;
   }
 }
 
-Future<bool> userReauthenticated(String email, String password) async
-{
+/// This method re-authenticate the user to allow various actions to be performed
+/// @params String email & password
+/// returns bool of the state
+Future<bool> userReauthenticated(String email, String password) async {
   try {
     // Create a credential
-    AuthCredential credential = EmailAuthProvider.credential(email: email, password: password);
+    AuthCredential credential =
+        EmailAuthProvider.credential(email: email, password: password);
 
     //Reauthenticate
-    await FirebaseAuth.instance.currentUser!.reauthenticateWithCredential(credential);
+    await FirebaseAuth.instance.currentUser!
+        .reauthenticateWithCredential(credential);
 
     return true;
   } on FirebaseAuthException catch (e) {
-
-      print('Error with reauthentication. Verify that the user\'s email and password were correct.');
+    print(
+        'Error with reauthentication. Verify that the user\'s email and password were correct.');
 
     return false;
   }
 }
-

@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 /// Check if a String is a valid email.
 /// Return true if it is valid.
 bool isEmail(String string) {
@@ -29,3 +31,4 @@ bool isPasswordValid(String password) {
   if (!password.contains(RegExp(r'[!@#$%^&*(),.?":{}|<>]'))) return false;
   return true;
 }
+

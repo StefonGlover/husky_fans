@@ -192,65 +192,74 @@ class _AccountPageState extends State<AccountPage> {
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
                 return Container(
-                  margin: EdgeInsets.all(10),
-                  child: new Card(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        ListTile(
-                          leading: Image.network(
-                              snapshot.data.docs[index].data()['profilePic']),
-                          title: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text(
-                                  snapshot.data.docs[index]
-                                          .data()['firstName'] +
-                                      " " +
-                                      snapshot.data.docs[index]
-                                          .data()['lastName'],
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold)),
-                            ],
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              Text("Number of posts: $postCount",
-                                  style: TextStyle(color: Colors.black)),
-                              Text(
-                                  "Email: " +
-                                      FirebaseAuth.instance.currentUser!.email
-                                          .toString(),
-                                  style: TextStyle(color: Colors.black)),
-                              Text(
-                                  'Date joined: ' +
-                                      snapshot.data.docs[index]
-                                          .data()['dateRegistered']
-                                          .toDate()
-                                          .toString()
-                                          .substring(0, 16),
-                                  style: TextStyle(color: Colors.black)),
-                            ],
-                          ),
-                        ),
-                        ButtonBar(
+                    margin: EdgeInsets.all(10),
+                    child: Card(
+                      child: Container(
+                        color: Colors.grey[900],
+                        height: 250,
+                        width: 350,
+                        child: Column(
                           children: [
-                            TextButton(
-                                onPressed: _deleteAccountAlertDialog,
-                                child: Text(
-                                  'Delete account',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold),
-                                ))
+                            SizedBox(height: 8),
+                            CircleAvatar(
+                              maxRadius: 50,
+                              backgroundColor: Colors.black,
+                              backgroundImage: NetworkImage(snapshot
+                                  .data.docs[index]
+                                  .data()['profilePic']),
+                            ),
+                            SizedBox(height: 8),
+                            Text(
+                              snapshot.data.docs[index].data()['bio'],
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 2),
+                            Text(
+                                snapshot.data.docs[index].data()['firstName'] +
+                                    " " +
+                                    snapshot.data.docs[index]
+                                        .data()['lastName'],
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(height: 2),
+                            Text(
+                                'Hometown: ' +
+                                    snapshot.data.docs[index]
+                                        .data()['hometown'],
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(height: 2),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                    'Date joined: ' +
+                                        snapshot.data.docs[index]
+                                            .data()['dateRegistered']
+                                            .toDate()
+                                            .toString()
+                                            .substring(0, 10),
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 10)),
+                                SizedBox(width: 150),
+                                Text("Number of posts: $postCount",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 10)),
+                              ],
+                            ),
+                            ButtonBar(
+                              children: [
+                                IconButton(onPressed: _deleteAccountAlertDialog, icon: Icon(Icons.delete, color: Colors.white,))
+                              ],
+                            )
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
+                        ),
+                      ),
+                    ));
               },
             );
           }

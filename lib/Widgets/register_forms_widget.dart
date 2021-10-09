@@ -30,7 +30,14 @@ class _RegisterFormsState extends State<RegisterForms> {
   TextEditingController _confirmPasswordField = TextEditingController();
   TextEditingController _firstNameField = TextEditingController();
   TextEditingController _lastNameField = TextEditingController();
+  TextEditingController _bioField = TextEditingController();
+  TextEditingController _hometownField = TextEditingController();
+  TextEditingController _ageField = TextEditingController();
 
+  /// The variable and method below allows the user to pick an image
+  /// from their gallery
+  /// @params none
+  /// returns void
   File? _image;
 
   Future<void> pickImage() async {
@@ -50,6 +57,12 @@ class _RegisterFormsState extends State<RegisterForms> {
     }
   }
 
+  /// This method obtains the url of the profile pic
+  /// @params none
+  /// returns String url
+  /// This method obtains the url of the profile pic
+  /// @params none
+  /// returns String url
   Future<String> uploadProfileImage() async {
     try {
       TaskSnapshot taskSnapshot = await FirebaseStorage.instance
@@ -58,11 +71,12 @@ class _RegisterFormsState extends State<RegisterForms> {
           .child(FirebaseAuth.instance.currentUser!.uid)
           .putFile(_image!);
 
-      return taskSnapshot.ref.getDownloadURL();
+      return await taskSnapshot.ref.getDownloadURL();
     } catch (e) {
       print('Failed upload image: $e');
 
-      return "";
+      //Default image
+      return "https://firebasestorage.googleapis.com/v0/b/fan-page-app-585d5.appspot.com/o/profilePics%2Fhusky_head.jpeg?alt=media&token=dd57f98a-2817-4107-9280-a51fa171d267";
     }
   }
 
@@ -104,6 +118,87 @@ class _RegisterFormsState extends State<RegisterForms> {
                     ),
                   ]),
                 ),
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter a short bio';
+                  }
+                },
+                autocorrect: false,
+                controller: _bioField,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    labelText: 'Bio',
+                    labelStyle: TextStyle(color: Colors.black),
+                    isDense: true,
+                    hintStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.menu_book_outlined,
+                      color: Colors.black,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(20))),
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter your hometown';
+                  }
+                },
+                autocorrect: false,
+                controller: _hometownField,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    labelText: 'Hometown',
+                    labelStyle: TextStyle(color: Colors.black),
+                    isDense: true,
+                    hintStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.home,
+                      color: Colors.black,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(20))),
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Must be 18 or older to register';
+                  }
+                },
+                autocorrect: false,
+                controller: _ageField,
+                style: TextStyle(color: Colors.black),
+                decoration: InputDecoration(
+                    labelText: 'Age (number)',
+                    labelStyle: TextStyle(color: Colors.black),
+                    isDense: true,
+                    hintStyle: TextStyle(
+                      color: Colors.black,
+                    ),
+                    prefixIcon: Icon(
+                      Icons.calculate,
+                      color: Colors.black,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Colors.black,
+                        ),
+                        borderRadius: BorderRadius.circular(20))),
               ),
               SizedBox(height: 20),
               TextFormField(
@@ -262,11 +357,14 @@ class _RegisterFormsState extends State<RegisterForms> {
                             String profilePic;
 
                             bool isUserValidated = await register(
+                                _bioField.text,
+                                _hometownField.text,
+                                _ageField.text,
                                 _emailField.text,
                                 _passwordField.text,
                                 _firstNameField.text,
                                 _lastNameField.text,
-                                profilePic = await uploadProfileImage(),
+                                profilePic = (await uploadProfileImage()),
                                 timeRegistered =
                                     Timestamp.fromDate(DateTime.now()));
 

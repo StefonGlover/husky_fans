@@ -42,8 +42,16 @@ Future<bool> signInAnonymously() async {
 /// This method allows the user to create a new account
 /// @params email, password, firstName, lastname, and time registered
 /// returns bool of the execution state
-Future<bool> register(String email, String password, String firstName,
-    String lastName, String profilePic, Timestamp timeRegistered) async {
+Future<bool> register(
+    String bio,
+    String hometown,
+    String age,
+    String email,
+    String password,
+    String firstName,
+    String lastName,
+    String profilePic,
+    Timestamp timeRegistered) async {
   try {
     await FirebaseAuth.instance
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -57,6 +65,9 @@ Future<bool> register(String email, String password, String firstName,
     users
         .doc(uid)
         .set({
+          'bio': bio,
+          'hometown': hometown,
+          'age': age,
           'firstName': firstName,
           'lastName': lastName,
           'profilePic': profilePic,

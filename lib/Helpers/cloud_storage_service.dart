@@ -1,4 +1,5 @@
-import 'dart:html';
+
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -8,15 +9,24 @@ import 'package:flutter/cupertino.dart';
 import 'auth.dart';
 
 
-Future<void> getProfilePic() async {
+class FirebaseApi{
 
-  FirebaseAuth auth = FirebaseAuth.instance;
+  static UploadTask? uploadPostImage(File file){
+    try{
+      FirebaseAuth auth = FirebaseAuth.instance;
 
-  //Get the user's id
-  String uid = auth.currentUser!.uid.toString();
+      //Get the user's id
+      String uid = auth.currentUser!.uid.toString();
 
-  String downloadURL = await
-  FirebaseStorage.instance.ref('profilePic/$uid').getDownloadURL();
-// Within your widgets:
-// Image.network(downloadURL);
+      final ref = FirebaseStorage.instance.ref('posts/$uid');
+
+      return ref.putFile(file);
+
+    }on FirebaseException catch(e)
+    {
+      print('$e');
+      return null;
+    }
+  }
+
 }

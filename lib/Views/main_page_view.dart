@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_page_app/Helpers/auth.dart';
 import 'package:fan_page_app/Views/account_page_view.dart';
@@ -5,8 +6,10 @@ import 'package:fan_page_app/Views/favorites_page_view.dart';
 import 'package:fan_page_app/Views/feed_page_view.dart';
 import 'package:fan_page_app/Views/friend_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 import '../main.dart';
@@ -24,7 +27,45 @@ class _MainPageViewState extends State<MainPageView> {
 
   CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
-  void _showDialog() {
+  File? _image;
+
+  Future<void> pickImage() async {
+    try {
+      final image =
+          await ImagePicker.platform.pickImage(source: ImageSource.gallery);
+      if (image == null) {
+        return;
+      }
+
+      final imageTemporary = File(image.path);
+      setState(() {
+        this._image = imageTemporary;
+      });
+    } on PlatformException catch (e) {
+      print('Failed to pick image: $e');
+    }
+  }
+
+  Future<String> uploadPostImage() async {
+    try {
+      String time = DateTime.now().toString();
+      TaskSnapshot taskSnapshot = await FirebaseStorage.instance
+          .ref()
+          .child("posts")
+          .child(FirebaseAuth.instance.currentUser!.uid)
+          .child('$time')
+          .putFile(_image!);
+
+      return await taskSnapshot.ref.getDownloadURL();
+    } catch (e) {
+      print('Failed upload image: $e');
+
+      //Default image
+      return "https://firebasestorage.googleapis.com/v0/b/fan-page-app-585d5.appspot.com/o/profilePics%2Fhusky_head.jpeg?alt=media&token=dd57f98a-2817-4107-9280-a51fa171d267";
+    }
+  }
+
+  void _showDialog(String name) {
     showDialog(
         context: context,
         builder: (BuildContext) {
@@ -39,6 +80,32 @@ class _MainPageViewState extends State<MainPageView> {
                 key: _formKey,
                 child: Column(
                   children: [
+                    GestureDetector(
+                      onTap: () async {
+                        await pickImage();
+                      },
+                      child: CircleAvatar(
+                        radius: 80,
+                        backgroundColor: Colors.black,
+                        backgroundImage: _image != null
+                            ? FileImage(_image!) as ImageProvider
+                            : AssetImage("assets/husky_head.jpeg"),
+                        child: Stack(children: [
+                          Align(
+                            alignment: Alignment.bottomRight,
+                            child: CircleAvatar(
+                              radius: 18,
+                              backgroundColor: Colors.white70,
+                              child: Icon(
+                                CupertinoIcons.camera,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ),
+                    SizedBox(height: 20),
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -68,14 +135,15 @@ class _MainPageViewState extends State<MainPageView> {
                     Row(
                       children: [
                         TextButton(
-                          onPressed: () {
+                          onPressed: () async {
+                            String url = await uploadPostImage();
                             if (_formKey.currentState!.validate()) {
                               posts
                                   .add({
                                     'details': _postMessage.text,
-                                    'firstName': 'PlaceHolder',
+                                    'firstName': name,
                                     'isFavorite': false,
-                                    'photo': 'Placeholder',
+                                    'photo': url,
                                     'uid':
                                         FirebaseAuth.instance.currentUser!.uid,
                                     'timePosted':
@@ -104,6 +172,7 @@ class _MainPageViewState extends State<MainPageView> {
   }
 
   var isAdmin = false;
+  var firstName;
 
   void getAdmin() async {
     var a = await FirebaseFirestore.instance
@@ -116,10 +185,25 @@ class _MainPageViewState extends State<MainPageView> {
     });
   }
 
+  void getName() async {
+    FirebaseFirestore.instance
+        .collection('users')
+        .doc(FirebaseAuth.instance.currentUser!.uid)
+        .get()
+        .then((data) async {
+      var dataReceive = data['firstName'];
+
+      setState(() {
+        firstName = dataReceive;
+      });
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     getAdmin();
+    getName();
   }
 
   List<Widget> _widgetOption = <Widget>[
@@ -195,7 +279,7 @@ class _MainPageViewState extends State<MainPageView> {
       floatingActionButton: new Visibility(
         visible: isAdmin,
         child: new FloatingActionButton(
-          onPressed: () => _showDialog(),
+          onPressed: () => _showDialog(firstName),
           child: const Icon(Icons.add),
           backgroundColor: Colors.grey[900],
         ),

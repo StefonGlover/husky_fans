@@ -65,10 +65,11 @@ class _RegisterFormsState extends State<RegisterForms> {
   /// returns String url
   Future<String> uploadProfileImage() async {
     try {
+      String time = DateTime.now().toString();
       TaskSnapshot taskSnapshot = await FirebaseStorage.instance
           .ref()
           .child("profilePics")
-          .child(FirebaseAuth.instance.currentUser!.uid)
+          .child('$time')
           .putFile(_image!);
 
       return await taskSnapshot.ref.getDownloadURL();

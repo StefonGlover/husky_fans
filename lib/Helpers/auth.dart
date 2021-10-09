@@ -190,3 +190,19 @@ Future<bool> userReauthenticated(String email, String password) async {
     return false;
   }
 }
+
+Future<bool> verifyUserEmail(String email) async {
+  try{
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user!= null && !user.emailVerified) {
+      await user.sendEmailVerification();
+    }
+    return true;
+
+  } on FirebaseException catch (e)
+  {
+    print('error: $e');
+    return false;
+  }
+}

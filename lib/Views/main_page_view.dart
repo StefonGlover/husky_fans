@@ -3,6 +3,7 @@ import 'package:fan_page_app/Helpers/auth.dart';
 import 'package:fan_page_app/Views/account_page_view.dart';
 import 'package:fan_page_app/Views/favorites_page_view.dart';
 import 'package:fan_page_app/Views/feed_page_view.dart';
+import 'package:fan_page_app/Views/friend_list.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -124,6 +125,7 @@ class _MainPageViewState extends State<MainPageView> {
   List<Widget> _widgetOption = <Widget>[
     FeedPage(),
     FavoritesPage(),
+    FriendsList(),
     AccountPage(),
   ];
 
@@ -184,7 +186,7 @@ class _MainPageViewState extends State<MainPageView> {
               ),
             ),
             child: const Icon(Icons.exit_to_app, color: Colors.white),
-          )
+          ),
         ],
       ),
       body: Center(
@@ -199,11 +201,15 @@ class _MainPageViewState extends State<MainPageView> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Colors.grey[900],
+        type: BottomNavigationBarType.fixed,
+        unselectedItemColor: Colors.white,
         items: [
           BottomNavigationBarItem(
               icon: Icon(Icons.view_headline), label: 'Feed'),
           BottomNavigationBarItem(
               icon: Icon(Icons.favorite), label: 'Favorites'),
+          BottomNavigationBarItem(icon: Icon(Icons.list_alt), label: 'Friends'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Account'),
         ],
         currentIndex: _selectedIndex,

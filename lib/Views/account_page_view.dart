@@ -155,6 +155,7 @@ class _AccountPageState extends State<AccountPage> {
         });
   }
 
+
   getPostsCount() async {
     QuerySnapshot _posts = await FirebaseFirestore.instance
         .collection('posts')
@@ -195,7 +196,6 @@ class _AccountPageState extends State<AccountPage> {
                     margin: EdgeInsets.all(10),
                     child: Card(
                       child: Container(
-                        color: Colors.grey[900],
                         height: 250,
                         width: 350,
                         child: Column(
@@ -212,7 +212,7 @@ class _AccountPageState extends State<AccountPage> {
                             Text(
                               snapshot.data.docs[index].data()['bio'],
                               style: TextStyle(
-                                  color: Colors.white,
+                                  color: Colors.black,
                                   fontWeight: FontWeight.bold),
                             ),
                             SizedBox(height: 2),
@@ -222,7 +222,7 @@ class _AccountPageState extends State<AccountPage> {
                                     snapshot.data.docs[index]
                                         .data()['lastName'],
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold)),
                             SizedBox(height: 2),
                             Text(
@@ -230,7 +230,7 @@ class _AccountPageState extends State<AccountPage> {
                                     snapshot.data.docs[index]
                                         .data()['hometown'],
                                 style: TextStyle(
-                                    color: Colors.white,
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold)),
                             SizedBox(height: 2),
                             Row(
@@ -244,18 +244,23 @@ class _AccountPageState extends State<AccountPage> {
                                             .toString()
                                             .substring(0, 10),
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 10)),
+                                        color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold)),
                                 SizedBox(width: 150),
                                 Text("Number of posts: $postCount",
                                     style: TextStyle(
-                                        color: Colors.white, fontSize: 10)),
+                                        color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold)),
                               ],
                             ),
                             ButtonBar(
                               children: [
-                                IconButton(onPressed: _deleteAccountAlertDialog, icon: Icon(Icons.delete, color: Colors.white,))
+                                IconButton(
+                                    onPressed: _deleteAccountAlertDialog,
+                                    icon: Icon(
+                                      Icons.delete,
+                                      color: Colors.black,
+                                    ))
                               ],
-                            )
+                            ),
                           ],
                         ),
                       ),

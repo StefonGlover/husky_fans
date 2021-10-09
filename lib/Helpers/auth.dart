@@ -73,7 +73,6 @@ Future<bool> register(
           'profilePic': profilePic,
           'dateRegistered': timeRegistered,
           'isAdmin': false,
-          'isCustomer': true,
           'uid': uid
         })
         .then((value) => print("User Added"))

@@ -32,7 +32,6 @@ dependencies:
   cloud_firestore: ^2.5.3
   firebase_core: ^1.6.0
   firebase_storage: ^10.0.3
-  flutter_facebook_login: ^3.0.0
   twitter_login: ^4.0.1
   google_sign_in: ^5.1.0
   rflutter_alert: ^1.0.3
@@ -42,6 +41,7 @@ dependencies:
   path_provider: ^2.0.5
   path: ^1.8.0
   intl: ^0.17.0
+
 
 
 dev_dependencies:

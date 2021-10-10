@@ -76,7 +76,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                         Container(
                           alignment: Alignment.center,
                           child: Image.network(
-                              snapshot.data.docs[index].data()['photo']),
+                              snapshot.data.docs[index].data()['photo'],height: 300),
                         ),
                         ButtonBar(
                           children: [

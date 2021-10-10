@@ -88,7 +88,7 @@ class _FeedPageState extends State<FeedPage> {
                         Container(
                           alignment: Alignment.center,
                           child: Image.network(
-                              snapshot.data.docs[index].data()['photo']),
+                              snapshot.data.docs[index].data()['photo'], height: 350),
                         ),
                         ButtonBar(
                           children: [

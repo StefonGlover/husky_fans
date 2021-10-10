@@ -30,7 +30,7 @@ class _FriendsListState extends State<FriendsList> {
           return AlertDialog(
             scrollable: true,
             title:
-                Text('$friendName', style: TextStyle(color: Colors.grey[900])),
+                Text('$friendName', style: TextStyle(fontWeight: FontWeight.bold)),
             content: Padding(
               padding: EdgeInsets.all(10),
               child: Column(
@@ -41,9 +41,9 @@ class _FriendsListState extends State<FriendsList> {
                     backgroundImage: NetworkImage('$friendPhoto'),
                   ),
                   SizedBox(height: 3),
-                  Text('Bio: ' + '$friendBio'),
-                  Text('Hometown: ' + '$friendHometown'),
-                  Text('Age: ' + '$friendAge'),
+                  Text('Bio: ' + '$friendBio', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('Hometown: ' + '$friendHometown', style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Age: ' + '$friendAge',  style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -71,13 +71,13 @@ class _FriendsListState extends State<FriendsList> {
                     margin: EdgeInsets.all(10),
                     child: Card(
                       child: Container(
-                        height: 210,
+                        height: 230,
                         width: 350,
                         child: Column(
                           children: [
                             SizedBox(height: 8),
                             CircleAvatar(
-                              maxRadius: 50,
+                              maxRadius: 55,
                               backgroundColor: Colors.black,
                               backgroundImage: NetworkImage(snapshot
                                   .data.docs[index]
@@ -91,7 +91,7 @@ class _FriendsListState extends State<FriendsList> {
                                         .data()['lastName'],
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
                             SizedBox(height: 2),
                             Text(
                                 'Date joined: ' +
@@ -102,7 +102,7 @@ class _FriendsListState extends State<FriendsList> {
                                         .substring(0, 10),
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.bold)),
                             ButtonBar(
                               children: [

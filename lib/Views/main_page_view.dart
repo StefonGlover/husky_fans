@@ -154,6 +154,7 @@ class _MainPageViewState extends State<MainPageView> {
                                       print('Failed to add post: $error'));
 
                               Navigator.of(context, rootNavigator: true).pop();
+                              
                             }
                           },
                           child: const Text(

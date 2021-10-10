@@ -196,13 +196,13 @@ class _AccountPageState extends State<AccountPage> {
                     margin: EdgeInsets.all(10),
                     child: Card(
                       child: Container(
-                        height: 250,
+                        height: 300,
                         width: 350,
                         child: Column(
                           children: [
                             SizedBox(height: 8),
                             CircleAvatar(
-                              maxRadius: 50,
+                              maxRadius: 70,
                               backgroundColor: Colors.black,
                               backgroundImage: NetworkImage(snapshot
                                   .data.docs[index]
@@ -213,7 +213,7 @@ class _AccountPageState extends State<AccountPage> {
                               snapshot.data.docs[index].data()['bio'],
                               style: TextStyle(
                                   color: Colors.black,
-                                  fontWeight: FontWeight.bold),
+                                  fontWeight: FontWeight.bold, fontSize: 20),
                             ),
                             SizedBox(height: 2),
                             Text(
@@ -223,7 +223,7 @@ class _AccountPageState extends State<AccountPage> {
                                         .data()['lastName'],
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
+                                    fontWeight: FontWeight.bold,fontSize: 15)),
                             SizedBox(height: 2),
                             Text(
                                 'Hometown: ' +
@@ -231,7 +231,7 @@ class _AccountPageState extends State<AccountPage> {
                                         .data()['hometown'],
                                 style: TextStyle(
                                     color: Colors.black,
-                                    fontWeight: FontWeight.bold)),
+                                    fontWeight: FontWeight.bold, fontSize: 15)),
                             SizedBox(height: 2),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -244,7 +244,7 @@ class _AccountPageState extends State<AccountPage> {
                                             .toString()
                                             .substring(0, 10),
                                     style: TextStyle(
-                                        color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold)),
+                                        color: Colors.black, fontSize: 10, fontWeight: FontWeight.bold,)),
                                 SizedBox(width: 150),
                                 Text("Number of posts: $postCount",
                                     style: TextStyle(

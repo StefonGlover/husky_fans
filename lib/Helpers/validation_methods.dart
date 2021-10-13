@@ -32,3 +32,13 @@ bool isPasswordValid(String password) {
   return true;
 }
 
+String greeting(String name) {
+  var hour = DateTime.now().hour;
+  if (hour < 12) {
+    return 'Good Morning, $name';
+  }
+  if (hour < 17) {
+    return 'Good Afternoon, $name';
+  }
+  return 'Good Evening, $name';
+}

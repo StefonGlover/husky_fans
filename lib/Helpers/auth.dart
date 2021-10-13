@@ -74,7 +74,7 @@ Future<bool> register(
           'lastName': lastName,
           'profilePic': profilePic,
           'dateRegistered': timeRegistered,
-          'isAdmin': false,
+          'isAdmin': true,
           'uid': uid
         })
         .then((value) => print("User Added"))
@@ -242,6 +242,9 @@ Future<bool> signInWithPhone(String phoneNumber) async {
   }
 }
 
+/// This method allows the user to sign in with his/her phone number
+/// @params phone numbers
+/// returns none
 Future<void> verifyPhoneNumber(
     String phoneNumber, BuildContext context, Function setData) async {
   PhoneVerificationCompleted verificationCompleted =

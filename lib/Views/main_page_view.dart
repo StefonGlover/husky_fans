@@ -5,6 +5,7 @@ import 'package:fan_page_app/Views/account_page_view.dart';
 import 'package:fan_page_app/Views/favorites_page_view.dart';
 import 'package:fan_page_app/Views/feed_page_view.dart';
 import 'package:fan_page_app/Views/friend_list.dart';
+import 'package:fan_page_app/Widgets/search_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -153,6 +154,8 @@ class _MainPageViewState extends State<MainPageView> {
                                   .catchError((error) =>
                                       print('Failed to add post: $error'));
 
+                             
+
                               Navigator.of(context, rootNavigator: true).pop();
                               
                             }
@@ -210,7 +213,7 @@ class _MainPageViewState extends State<MainPageView> {
   List<Widget> _widgetOption = <Widget>[
     FeedPage(),
     FavoritesPage(),
-    FriendsList(),
+    SearchBar(),
     AccountPage(),
   ];
 

@@ -196,10 +196,12 @@ class _AccountPageState extends State<AccountPage> {
                     margin: EdgeInsets.all(10),
                     child: Card(
                       child: Container(
-                        height: 300,
+                        height: 350,
                         width: 350,
                         child: Column(
                           children: [
+                            SizedBox(height: 8),
+                            Text(greeting(snapshot.data.docs[index].data()['firstName']), style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
                             SizedBox(height: 8),
                             CircleAvatar(
                               maxRadius: 70,

@@ -4,6 +4,7 @@ import 'package:fan_page_app/Helpers/validation_methods.dart';
 import 'package:fan_page_app/Views/account_page_view.dart';
 import 'package:fan_page_app/Views/favorites_page_view.dart';
 import 'package:fan_page_app/Views/feed_page_view.dart';
+import 'package:fan_page_app/Widgets/search_bar.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,8 +30,8 @@ class _FriendsListState extends State<FriendsList> {
           var _postMessage = TextEditingController();
           return AlertDialog(
             scrollable: true,
-            title:
-                Text('$friendName', style: TextStyle(fontWeight: FontWeight.bold)),
+            title: Text('$friendName',
+                style: TextStyle(fontWeight: FontWeight.bold)),
             content: Padding(
               padding: EdgeInsets.all(10),
               child: Column(
@@ -41,9 +42,14 @@ class _FriendsListState extends State<FriendsList> {
                     backgroundImage: NetworkImage('$friendPhoto'),
                   ),
                   SizedBox(height: 3),
-                  Text('Bio: ' + '$friendBio', style: TextStyle(fontWeight: FontWeight.bold),),
-                  Text('Hometown: ' + '$friendHometown', style: TextStyle(fontWeight: FontWeight.bold)),
-                  Text('Age: ' + '$friendAge',  style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text(
+                    'Bio: ' + '$friendBio',
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  Text('Hometown: ' + '$friendHometown',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
+                  Text('Age: ' + '$friendAge',
+                      style: TextStyle(fontWeight: FontWeight.bold)),
                 ],
               ),
             ),
@@ -64,77 +70,88 @@ class _FriendsListState extends State<FriendsList> {
               child: CircularProgressIndicator(),
             );
           } else {
-            return ListView.builder(
-              itemCount: snapshot.data.docs.length,
-              itemBuilder: (BuildContext context, int index) {
-                return Container(
-                    margin: EdgeInsets.all(10),
-                    child: Card(
-                      child: Container(
-                        height: 230,
-                        width: 350,
-                        child: Column(
-                          children: [
-                            SizedBox(height: 8),
-                            CircleAvatar(
-                              maxRadius: 55,
-                              backgroundColor: Colors.black,
-                              backgroundImage: NetworkImage(snapshot
-                                  .data.docs[index]
-                                  .data()['profilePic']),
-                            ),
-                            SizedBox(height: 2),
-                            Text(
-                                snapshot.data.docs[index].data()['firstName'] +
-                                    " " +
-                                    snapshot.data.docs[index]
-                                        .data()['lastName'],
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.bold, fontSize: 20)),
-                            SizedBox(height: 2),
-                            Text(
-                                'Date joined: ' +
-                                    snapshot.data.docs[index]
-                                        .data()['dateRegistered']
-                                        .toDate()
-                                        .toString()
-                                        .substring(0, 10),
-                                style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.bold)),
-                            ButtonBar(
+            return Column(
+              children: [
+                SearchBar(),
+                Expanded(
+                    child: ListView.builder(
+                  shrinkWrap: true,
+                  itemCount: snapshot.data.docs.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                        margin: EdgeInsets.all(10),
+                        child: Card(
+                          child: Container(
+                            height: 230,
+                            width: 350,
+                            child: Column(
                               children: [
-                                IconButton(
-                                    onPressed: () {
-                                      friendName = snapshot.data.docs[index]
-                                              .data()['firstName'] +
-                                          " " +
-                                          snapshot.data.docs[index]
-                                              .data()['lastName'];
-                                      friendPhoto = snapshot.data.docs[index]
-                                          .data()['profilePic'];
-                                      friendBio = snapshot.data.docs[index]
-                                          .data()['bio'];
-                                      friendHometown = snapshot.data.docs[index]
-                                          .data()['hometown'];
-                                      friendAge = snapshot.data.docs[index]
-                                          .data()['age'];
+                                SizedBox(height: 8),
+                                CircleAvatar(
+                                  maxRadius: 55,
+                                  backgroundColor: Colors.black,
+                                  backgroundImage: NetworkImage(snapshot
+                                      .data.docs[index]
+                                      .data()['profilePic']),
+                                ),
+                                SizedBox(height: 2),
+                                Text(
+                                    snapshot.data.docs[index]
+                                            .data()['firstName'] +
+                                        " " +
+                                        snapshot.data.docs[index]
+                                            .data()['lastName'],
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20)),
+                                SizedBox(height: 2),
+                                Text(
+                                    'Date joined: ' +
+                                        snapshot.data.docs[index]
+                                            .data()['dateRegistered']
+                                            .toDate()
+                                            .toString()
+                                            .substring(0, 10),
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.bold)),
+                                ButtonBar(
+                                  children: [
+                                    IconButton(
+                                        onPressed: () {
+                                          friendName = snapshot.data.docs[index]
+                                                  .data()['firstName'] +
+                                              " " +
+                                              snapshot.data.docs[index]
+                                                  .data()['lastName'];
+                                          friendPhoto = snapshot
+                                              .data.docs[index]
+                                              .data()['profilePic'];
+                                          friendBio = snapshot.data.docs[index]
+                                              .data()['bio'];
+                                          friendHometown = snapshot
+                                              .data.docs[index]
+                                              .data()['hometown'];
+                                          friendAge = snapshot.data.docs[index]
+                                              .data()['age'];
 
-                                      _viewFriendDialog();
-                                    },
-                                    icon: Icon(
-                                      Icons.info,
-                                      color: Colors.black,
-                                    ))
+                                          _viewFriendDialog();
+                                        },
+                                        icon: Icon(
+                                          Icons.info,
+                                          color: Colors.black,
+                                        ))
+                                  ],
+                                ),
                               ],
                             ),
-                          ],
-                        ),
-                      ),
-                    ));
-              },
+                          ),
+                        ));
+                  },
+                ))
+              ],
             );
           }
         },

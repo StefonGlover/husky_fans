@@ -100,7 +100,7 @@ Future<int> getPostsCount() async {
   return _myPostCount.length;
 }
 
-Future<List> gUserInfor() async {
+Future<List> getUserInfor() async {
   QuerySnapshot _user = await FirebaseFirestore.instance
       .collection('user')
       .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
@@ -108,4 +108,6 @@ Future<List> gUserInfor() async {
   List<DocumentSnapshot> _myUser = _user.docs;
   return _myUser;
 }
+
+
 

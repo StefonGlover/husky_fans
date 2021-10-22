@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_page_app/Helpers/auth.dart';
 import 'package:fan_page_app/Helpers/validation_methods.dart';
 import 'package:fan_page_app/Views/register_view.dart';
@@ -20,6 +21,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   //Form key and variables
   final _formKey = GlobalKey<FormState>();
+
 
   //Controllers to catch user's inputs
   TextEditingController _emailField = TextEditingController();

@@ -14,6 +14,8 @@ class SearchBar extends StatefulWidget {
 
 class _SearchBarState extends State<SearchBar> {
   TextEditingController _searchController = TextEditingController();
+  final ScrollController _firstController = ScrollController();
+
 
   late Future resultsLoaded;
   List _allResults = [];
@@ -100,11 +102,15 @@ class _SearchBarState extends State<SearchBar> {
             ),
           ),
           Expanded(
-              child: ListView.builder(
-            itemCount: _resultsList.length,
-            itemBuilder: (BuildContext context, int index) =>
-                buildFriendsSearch(context, _resultsList[index]),
-          )),
+              child: Scrollbar(
+                controller: _firstController,
+                child: ListView.builder(
+                  controller: _firstController,
+                  itemCount: _resultsList.length,
+                  itemBuilder: (BuildContext context, int index) =>
+                      buildFriendsSearch(context, _resultsList[index]),
+                ),
+              )),
         ],
       ),
     );

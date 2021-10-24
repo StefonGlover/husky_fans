@@ -26,8 +26,10 @@ Future<bool> createChatRoom(String chatRoomId, chatRoomMap) async {
 
 Future<bool> createChatRoomAndStartConversation(String friendUID) async {
   try {
-    String chatRoomID =
-        FirebaseAuth.instance.currentUser!.uid + "_" + friendUID;
+   //String chatRoomID =FirebaseAuth.instance.currentUser!.uid + "_" + friendUID;
+
+    String chatRoomID = getChatRoomId(friendUID,  FirebaseAuth.instance.currentUser!.uid);
+
 
     List<String> users = [FirebaseAuth.instance.currentUser!.uid, friendUID];
 
@@ -65,7 +67,7 @@ Future<bool> createConversationMessages(String chatRoomId, messageMap) async {
         .collection('chatRoom')
         .doc(chatRoomId)
         .collection('chats')
-        .orderBy('timeSent', descending: true )
+        .orderBy('timeSent' )
         .snapshots();
 
   } on FirebaseException catch (e) {
@@ -84,3 +86,23 @@ sendMessage(String chatRoomId, String message, String friendUID) {
 
   createConversationMessages(chatRoomId, messageMap);
 }
+
+getUserChats() async {
+  return await FirebaseFirestore.instance
+      .collection("chatRoom")
+      .where('users', arrayContains: FirebaseAuth.instance.currentUser!.uid)
+      .snapshots();
+}
+
+getChatRoomId(String a, String b)
+{
+  if(a.substring(0,1).codeUnitAt(0) > b.substring(0,1).codeUnitAt(0))
+    {
+      return "$b\_$a";
+    }
+  else
+    {
+      return "$a\_$b";
+    }
+}
+

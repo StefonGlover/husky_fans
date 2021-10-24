@@ -22,8 +22,8 @@ class _ChatRoomPageState extends State<ChatRoomPage> {
   @override
   void initState() {
     super.initState();
-    chatRoomID =
-        FirebaseAuth.instance.currentUser!.uid + "_" + widget.chatWithUser.uid;
+    chatRoomID = getChatRoomId(
+        widget.chatWithUser.uid, FirebaseAuth.instance.currentUser!.uid);
   }
 
   @override

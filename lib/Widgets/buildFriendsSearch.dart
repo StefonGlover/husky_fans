@@ -62,11 +62,14 @@ Widget buildFriendsSearch(BuildContext context, DocumentSnapshot document) {
                         onPressed: () async {
                           if (await createChatRoomAndStartConversation(
                               friends.uid)) {
+                            Navigator.of(context, rootNavigator: true)
+                                .pop();
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => ChatRoomPage(
                                         chatWithUser: getFriendObject())));
+
                           } else {
                             SnackBar(
                               content: Text('Error creating chatroom'),

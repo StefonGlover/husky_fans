@@ -19,6 +19,7 @@ class Conversation extends StatelessWidget {
           .collection('chatRoom')
           .doc(chatRoomID)
           .collection('chats')
+          .orderBy('timeSent')
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {

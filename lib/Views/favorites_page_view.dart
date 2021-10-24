@@ -14,7 +14,6 @@ class _FavoritesPageState extends State<FavoritesPage> {
   CollectionReference favorites =
       FirebaseFirestore.instance.collection('favorites');
 
-
   int numberOfItems = 1000;
 
   List<Color> _colors = [];
@@ -31,21 +30,22 @@ class _FavoritesPageState extends State<FavoritesPage> {
     getdatafromserver();
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FutureBuilder(
-        future: favorites
+      child: StreamBuilder(
+        stream: favorites
             .orderBy('timePosted', descending: true)
             .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-            .get(),
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          }
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
           } else {
+            final data = snapshot.requireData;
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
@@ -63,35 +63,46 @@ class _FavoritesPageState extends State<FavoritesPage> {
                           title: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              Text(snapshot.data.docs[index].data()['firstName'], style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
-                              Text(snapshot.data.docs[index].data()['timePosted'].toDate().toString().substring(0,16), style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold))
+                              Text(data.docs[index]['firstName'],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                  data.docs[index]['timePosted']
+                                      .toDate()
+                                      .toString()
+                                      .substring(0, 16),
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold))
                             ],
                           ),
-                          subtitle: Text(
-                              snapshot.data.docs[index].data()['details'],
+                          subtitle: Text(data.docs[index]['details'],
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
                         ),
                         Container(
                           alignment: Alignment.center,
-                          child: Image.network(
-                              snapshot.data.docs[index].data()['photo'],height: 300),
+                          child: Image.network(data.docs[index]['photo'],
+                              height: 300),
                         ),
                         ButtonBar(
                           children: [
-                           IconButton(onPressed: () async{
-                             setState(() {
-                               _colors[index] = Colors.black;
-                             });
+                            IconButton(
+                                onPressed: () async {
+                                  setState(() {
+                                    _colors[index] = Colors.black;
+                                  });
 
-                             deleteFavorite(snapshot.data.docs[index].data()['details'], snapshot.data.docs[index].data()['firstName']);
-
-                           }, icon: Icon(Icons.favorite, color: _colors[index])),
+                                  deleteFavorite(data.docs[index]['details'],
+                                      data.docs[index]['firstName']);
+                                },
+                                icon: Icon(Icons.favorite,
+                                    color: _colors[index])),
                             IconButton(
                                 onPressed: null,
-                                icon:
-                                Icon(Icons.chat, color: Colors.black))
+                                icon: Icon(Icons.chat, color: Colors.black))
                           ],
                         )
                       ],

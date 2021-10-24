@@ -37,14 +37,19 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: FutureBuilder(
-        future: posts.orderBy('timePosted', descending: true).get(),
+      child: StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .orderBy('timePosted', descending: true)
+            .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (!snapshot.hasData) {
-            return Center(
-              child: CircularProgressIndicator(),
-            );
+          if (snapshot.hasError) {
+            return Text("Something went wrong");
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
           } else {
+            final data = snapshot.requireData;
             return ListView.builder(
               itemCount: snapshot.data.docs.length,
               itemBuilder: (BuildContext context, int index) {
@@ -64,13 +69,12 @@ class _FeedPageState extends State<FeedPage> {
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
                               Text(
-                                  snapshot.data.docs[index].data()['firstName'],
+                                  data.docs[index]['firstName'],
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontWeight: FontWeight.bold)),
                               Text(
-                                  snapshot.data.docs[index]
-                                      .data()['timePosted']
+                                  data.docs[index]['timePosted']
                                       .toDate()
                                       .toString()
                                       .substring(0, 16),
@@ -80,7 +84,7 @@ class _FeedPageState extends State<FeedPage> {
                             ],
                           ),
                           subtitle: Text(
-                              snapshot.data.docs[index].data()['details'],
+                              data.docs[index]['details'],
                               style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: Colors.black)),
@@ -88,7 +92,8 @@ class _FeedPageState extends State<FeedPage> {
                         Container(
                           alignment: Alignment.center,
                           child: Image.network(
-                              snapshot.data.docs[index].data()['photo'], height: 350),
+                              data.docs[index]['photo'],
+                              height: 350),
                         ),
                         ButtonBar(
                           children: [
@@ -100,14 +105,10 @@ class _FeedPageState extends State<FeedPage> {
                                         _colors[index] = Colors.red;
                                       });
                                       bool favoriteAdded = await getFavorite(
-                                          snapshot.data.docs[index]
-                                              .data()['details'],
-                                          snapshot.data.docs[index]
-                                              .data()['firstName'],
-                                          snapshot.data.docs[index]
-                                              .data()['photo'],
-                                          snapshot.data.docs[index]
-                                              .data()['timePosted']);
+                                          data.docs[index]['details'],
+                                          data.docs[index]['firstName'],
+                                          data.docs[index]['photo'],
+                                          data.docs[index]['timePosted']);
 
                                       if (favoriteAdded) {
                                         ScaffoldMessenger.of(context)

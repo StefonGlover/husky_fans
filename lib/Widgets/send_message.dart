@@ -48,8 +48,9 @@ class SendMessage extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20))),
         )),
         IconButton(
-            onPressed: ()
+            onPressed: () async
                 {
+                  createChatRoomAndStartConversation(friendUID);
                   sendMessage(chatRoomID, _messageController.text, friendUID);
                   _messageController.clear();
                 },

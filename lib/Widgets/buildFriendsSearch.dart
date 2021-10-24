@@ -60,21 +60,12 @@ Widget buildFriendsSearch(BuildContext context, DocumentSnapshot document) {
                     color: Colors.grey[900],
                     child: TextButton(
                         onPressed: () async {
-                          if (await createChatRoomAndStartConversation(
-                              friends.uid)) {
-                            Navigator.of(context, rootNavigator: true)
-                                .pop();
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ChatRoomPage(
-                                        chatWithUser: getFriendObject())));
-
-                          } else {
-                            SnackBar(
-                              content: Text('Error creating chatroom'),
-                            );
-                          }
+                          Navigator.of(context, rootNavigator: true).pop();
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChatRoomPage(
+                                      chatWithUser: getFriendObject())));
                         },
                         child: Text('Message',
                             style: TextStyle(

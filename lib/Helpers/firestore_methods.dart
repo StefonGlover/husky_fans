@@ -20,7 +20,7 @@ Future<bool> addUser(
           'firstName': firstName,
           'lastName': lastName,
           'dateRegistered': dateRegistered,
-          'isAdmin': false,
+          'isAdmin': true,
           'isCustomer': true,
           'uid': uid
         })

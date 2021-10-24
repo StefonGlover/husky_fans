@@ -4,6 +4,7 @@ import 'package:fan_page_app/Helpers/auth.dart';
 import 'package:fan_page_app/Views/account_page_view.dart';
 import 'package:fan_page_app/Views/favorites_page_view.dart';
 import 'package:fan_page_app/Views/feed_page_view.dart';
+import 'package:fan_page_app/Views/post_message_page.dart';
 
 import 'package:fan_page_app/Widgets/search_bar.dart';
 import 'package:fan_page_app/models/user.dart';
@@ -24,53 +25,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final _formKey = GlobalKey<FormState>();
 
-  CollectionReference posts = FirebaseFirestore.instance.collection('posts');
 
-  File? _image;
 
   @override
   void dispose() {
-    _image;
     super.dispose();
   }
 
-  Future<void> pickImage() async {
-    try {
-      final image =
-          await ImagePicker.platform.pickImage(source: ImageSource.gallery);
-      if (image == null) {
-        return;
-      }
-
-      final imageTemporary = File(image.path);
-      setState(() {
-        this._image = imageTemporary;
-      });
-    } on PlatformException catch (e) {
-      print('Failed to pick image: $e');
-    }
-  }
-
-  Future<String> uploadPostImage() async {
-    try {
-      String time = DateTime.now().toString();
-      TaskSnapshot taskSnapshot = await FirebaseStorage.instance
-          .ref()
-          .child("posts")
-          .child(FirebaseAuth.instance.currentUser!.uid)
-          .child('$time')
-          .putFile(_image!);
-
-      return await taskSnapshot.ref.getDownloadURL();
-    } catch (e) {
-      print('Failed upload image: $e');
-
-      //Default image
-      return "https://firebasestorage.googleapis.com/v0/b/fan-page-app-585d5.appspot.com/o/profilePics%2Fhusky_head.jpeg?alt=media&token=dd57f98a-2817-4107-9280-a51fa171d267";
-    }
-  }
 
   UserInfor? _userInfor;
 
@@ -120,17 +82,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
     if (_userInfor == null) {
       return MaterialApp(
           debugShowCheckedModeBanner: false,
-        home: Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(
-
+          home: Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
             ),
-          ),
-        )
-      );
+          ));
     } else {
       return Scaffold(
         appBar: AppBar(
@@ -189,7 +149,11 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: new Visibility(
           visible: _userInfor!.isAdmin,
           child: new FloatingActionButton(
-            onPressed: _showDialog,
+            onPressed: () =>
+            {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => PostMessage(_userInfor)))
+            },
             child: const Icon(Icons.add),
             backgroundColor: Colors.grey[900],
           ),
@@ -214,109 +178,4 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
-  void _showDialog() {
-    showDialog(
-        context: context,
-        builder: (BuildContext) {
-          var _postMessage = TextEditingController();
-          return AlertDialog(
-            scrollable: true,
-            title: Text('Share your husky moments',
-                style: TextStyle(color: Colors.grey[900])),
-            content: Padding(
-              padding: EdgeInsets.all(10),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        await pickImage();
-                      },
-                      child: CircleAvatar(
-                        radius: 80,
-                        backgroundColor: Colors.black,
-                        backgroundImage: _image != null
-                            ? FileImage(_image!) as ImageProvider
-                            : AssetImage("assets/husky_head.jpeg"),
-                        child: Stack(children: [
-                          Align(
-                            alignment: Alignment.bottomRight,
-                            child: CircleAvatar(
-                              radius: 18,
-                              backgroundColor: Colors.white70,
-                              child: Icon(
-                                CupertinoIcons.camera,
-                                color: Colors.black,
-                              ),
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    TextFormField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your message';
-                        }
-                      },
-                      autocorrect: false,
-                      controller: _postMessage,
-                      style: TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                          labelText: 'Message',
-                          labelStyle: TextStyle(color: Colors.black),
-                          isDense: true,
-                          hintStyle: TextStyle(
-                            color: Colors.black,
-                          ),
-                          prefixIcon: Icon(
-                            Icons.pets,
-                            color: Colors.black,
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                color: Colors.black,
-                              ),
-                              borderRadius: BorderRadius.circular(20))),
-                    ),
-                    Row(
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            String url = await uploadPostImage();
-                            if (_formKey.currentState!.validate()) {
-                              posts
-                                  .add({
-                                    'details': _postMessage.text,
-                                    'firstName': _userInfor!.firstName,
-                                    'isFavorite': false,
-                                    'photo': url,
-                                    'uid':
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                    'timePosted':
-                                        Timestamp.fromDate(DateTime.now())
-                                  })
-                                  .then((value) => print('Post Added'))
-                                  .catchError((error) =>
-                                      print('Failed to add post: $error'));
-
-                              Navigator.of(context, rootNavigator: true).pop();
-                            }
-                          },
-                          child: const Text(
-                            'Post',
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-              ),
-            ),
-          );
-        });
-  }
 }

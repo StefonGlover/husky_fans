@@ -29,18 +29,16 @@ class _ProfileBuilderState extends State<ProfileBuilder> {
         .get()
         .then((data) async {
       setState(() {
-        var bio = data['bio'];
-        var firstName = data['firstName'];
-        var lastName = data['lastName'];
-        var profilePic = data['profilePic'];
-        var age = data['age'];
-        var hometown = data['hometown'];
-        var uid = data['uid'];
-        var dateRegistered = data['dateRegistered'];
-        var isAdmin = data['isAdmin'];
-
-        _userInfor = UserInfor(profilePic, bio, hometown, firstName, lastName,
-            age, isAdmin, dateRegistered, uid);
+        _userInfor = UserInfor(
+            data['profilePic'],
+            data['bio'],
+            data['hometown'],
+            data['firstName'],
+            data['lastName'],
+            data['age'],
+            data['isAdmin'],
+            data['dateRegistered'],
+            data['uid']);
       });
     });
   }
@@ -73,8 +71,7 @@ class _ProfileBuilderState extends State<ProfileBuilder> {
           debugShowCheckedModeBanner: false,
           home: Scaffold(
             body: Center(
-              child: CircularProgressIndicator(
-              ),
+              child: CircularProgressIndicator(),
             ),
           ));
     } else {

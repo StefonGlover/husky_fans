@@ -1,10 +1,12 @@
 import 'dart:ffi';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fan_page_app/Helpers/chat_functions.dart';
 import 'package:fan_page_app/Views/chatroom_page_view.dart';
 
 import 'package:fan_page_app/models/friendsList.dart';
 import 'package:fan_page_app/models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -57,12 +59,19 @@ Widget buildFriendsSearch(BuildContext context, DocumentSnapshot document) {
                     width: 100,
                     color: Colors.grey[900],
                     child: TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ChatRoomPage(
-                                      chatWithUser: getFriendObject())));
+                        onPressed: () async {
+                          if (await createChatRoomAndStartConversation(
+                              friends.uid)) {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ChatRoomPage(
+                                        chatWithUser: getFriendObject())));
+                          } else {
+                            SnackBar(
+                              content: Text('Error creating chatroom'),
+                            );
+                          }
                         },
                         child: Text('Message',
                             style: TextStyle(

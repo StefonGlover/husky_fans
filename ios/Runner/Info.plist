@@ -53,8 +53,8 @@
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false/>
 		<key>NSPhotoLibraryUsageDescription</key>
-        <string>Permission to access photo gallery</string>
-        <key>NSCameraUsageDescription</key>
-        <string>Permission to access camera</string>
+		<string>Permission to access photo gallery</string>
+		<key>NSCameraUsageDescription</key>
+		<string>Permission to access camera</string>
 	</dict>
 </plist>

@@ -3,8 +3,8 @@ import 'package:fan_page_app/Helpers/auth.dart';
 import 'package:fan_page_app/Helpers/firestore_methods.dart';
 import 'package:fan_page_app/Helpers/validation_methods.dart';
 import 'package:fan_page_app/Views/main_page_view.dart';
-import 'package:fan_page_app/Widgets/delete_account_alert.dart';
-import 'package:fan_page_app/Widgets/profile_builder.dart';
+import 'package:fan_page_app/Widgets/Profile/delete_account_alert.dart';
+import 'package:fan_page_app/Widgets/Profile/profile_builder.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

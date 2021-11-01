@@ -1,5 +1,5 @@
 import 'package:fan_page_app/Helpers/chat_functions.dart';
-import 'package:fan_page_app/Widgets/messageLayout.dart';
+import 'package:fan_page_app/Widgets/Friends/messageLayout.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

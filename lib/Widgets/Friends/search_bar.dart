@@ -1,5 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:fan_page_app/Widgets/buildFriendsSearch.dart';
+import 'package:fan_page_app/Widgets/Friends/buildFriendsSearch.dart';
 import 'package:fan_page_app/models/friendsList.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -46,6 +46,7 @@ class _SearchBarState extends State<SearchBar> {
 
   searchResultsList() {
     var showResults = [];
+    var rankedResuts = [];
 
     if (_searchController.text != "") {
       for (var friendsSnapshot in _allResults) {

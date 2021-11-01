@@ -6,7 +6,7 @@ import 'package:fan_page_app/Views/favorites_page_view.dart';
 import 'package:fan_page_app/Views/feed_page_view.dart';
 import 'package:fan_page_app/Views/post_message_page.dart';
 
-import 'package:fan_page_app/Widgets/search_bar.dart';
+import 'package:fan_page_app/Widgets/Friends/search_bar.dart';
 import 'package:fan_page_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
@@ -35,6 +35,7 @@ class _HomePageState extends State<HomePage> {
 
 
   UserInfor? _userInfor;
+  double? rating;
 
   Future getUserProfile() async {
     await FirebaseFirestore.instance
@@ -58,6 +59,8 @@ class _HomePageState extends State<HomePage> {
       });
     });
   }
+
+
 
   @override
   void initState() {

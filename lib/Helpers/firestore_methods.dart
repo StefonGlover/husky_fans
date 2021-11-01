@@ -109,5 +109,38 @@ Future<List> getUserInfor() async {
   return _myUser;
 }
 
+Future<bool> rankFriend(String friendUID, chatRoomMap) async {
+  try {
+    await FirebaseFirestore.instance
+        .collection('ranking')
+        .doc(friendUID)
+        .set(chatRoomMap)
+        .catchError((e) {
+      print(e.toString());
+    });
+    return true;
+  } on FirebaseException catch (e) {
+    return false;
+    print("Error: $e");
+  }
+}
+
+Future<bool> createRank(String friendUID, double rank) async {
+  try {
+
+
+    Map<String, dynamic> chatRoomMap = {
+      "rank": rank,
+      "rankingUserUID": FirebaseAuth.instance.currentUser!.uid
+    };
+
+    rankFriend(friendUID, chatRoomMap);
+
+    return true;
+  } on FirebaseException catch (e) {
+    return false;
+    print("Error: $e");
+  }
+}
 
 

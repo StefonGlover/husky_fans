@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fan_page_app/Helpers/chat_functions.dart';
-import 'package:fan_page_app/Widgets/conversation.dart';
-import 'package:fan_page_app/Widgets/send_message.dart';
+import 'package:fan_page_app/Widgets/Friends/conversation.dart';
+import 'package:fan_page_app/Widgets/Friends/send_message.dart';
 import 'package:fan_page_app/models/user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';

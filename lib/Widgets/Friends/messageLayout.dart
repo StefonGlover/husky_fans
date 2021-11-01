@@ -36,6 +36,7 @@ class MessageLayout extends StatelessWidget {
                 style: TextStyle(color: sentBy ? Colors.black : Colors.white),
               ),
             ],
+
           ),
         )
       ],

@@ -126,7 +126,7 @@ Widget buildFriendsSearch(BuildContext context, DocumentSnapshot document) {
                       TextFormField(
                         keyboardType: TextInputType.number,
                         inputFormatters: <TextInputFormatter>[
-                          FilteringTextInputFormatter.digitsOnly
+                          FilteringTextInputFormatter.allow(RegExp('[0-9.,]+'))
                         ],
                         validator: (value) {
                           if (double.tryParse(value!)! < 0 ||
@@ -190,7 +190,7 @@ Widget buildFriendsSearch(BuildContext context, DocumentSnapshot document) {
           width: 350,
           child: Column(
             children: [
-              GetUserName(friends.uid),
+              GetFriendRank(friends.uid),
               SizedBox(height: 8),
               CircleAvatar(
                 maxRadius: 55,

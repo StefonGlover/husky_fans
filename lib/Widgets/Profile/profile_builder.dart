@@ -137,6 +137,26 @@ class _ProfileBuilderState extends State<ProfileBuilder> {
                           icon: Icon(
                             Icons.delete,
                             color: Colors.black,
+                          )),
+                      IconButton(
+                          onPressed: () async {
+                            FirebaseFirestore.instance
+                                .collection('users')
+                                .doc('7h4ohkm4L3PFnLDGDKG5QtVXYnH2')
+                            .collection('ranks')
+                            .doc('X1RVjxN7v7RIQoEFq1q94QFdADk2')
+                                .get()
+                                .then((DocumentSnapshot documentSnapshot) {
+                              if (documentSnapshot.exists) {
+                                print('Document data: ${documentSnapshot.data()}');
+                              } else {
+                                print('Document does not exist on the database');
+                              }
+                            });
+                          },
+                          icon: Icon(
+                            Icons.catching_pokemon,
+                            color: Colors.black,
                           ))
                     ],
                   ),
